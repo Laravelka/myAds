@@ -139,7 +139,7 @@ class AuthController extends Controller
 					$this->response = [
 						'user' => $newUser,
 						'token' => $token,
-						'message'=> 'Регистрация прошла успешно'
+						'message'=> 'Регистрация прошла успешно.'
 					];
 				}
 			}
@@ -168,7 +168,7 @@ class AuthController extends Controller
 			$this->status = 400;
 			$this->response = [
 				'error' => true,
-				'message' => 'Пользователь с таким номером не найден'
+				'message' => 'Пользователь с таким номером не найден.'
 			];
 		}
 		else
@@ -275,7 +275,7 @@ class AuthController extends Controller
 						$this->status = 400;
 						$this->response = [
 							'error' => true,
-							'message' => 'Пользователь с таким номером не найден'
+							'message' => 'Пользователь с таким номером не найден.'
 						];
 					}
 					else
@@ -287,7 +287,7 @@ class AuthController extends Controller
 						$this->starus = 200;
 						$this->response = [
 							'password' => $pass,
-							'message'=> 'Пароль успешно сброшен'
+							'message'=> 'Пароль успешно сброшен.'
 						];
 					}
 				}
@@ -322,7 +322,7 @@ class AuthController extends Controller
 			$this->response = [
 				'user' => $user,
 				'token' => $user->token,
-				'message'=> 'Авторизация прошла успешно'
+				'message'=> 'Авторизация прошла успешно.'
 			];
 			
 		}
