@@ -13,12 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-
+Route::post('test', 'Api\AuthController@test');
 Route::post('login', 'Api\AuthController@login');
-Route::post('verify', 'Api\AuthController@verify');
 Route::post('recovery', 'Api\AuthController@recovery');
 Route::post('recovery/confirm', 'Api\AuthController@recoveryConfirm');
 Route::post('register', 'Api\AuthController@register');
+Route::post('register/confirm', 'Api\AuthController@registerConfirm');
 
 Route::group(['middleware' => 'auth:api'], function() {
 	Route::get('user', 'Api\AuthController@getUser');

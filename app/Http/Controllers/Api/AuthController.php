@@ -36,12 +36,12 @@ class AuthController extends Controller
 		}
 		else
 		{
-			$code = rand(0000, 9999);
+			$code = rand(1000, 9999);
 			$args = [
 				'number' => $inputs['phone'],
 				'text' => 'Код для подтверждения регистрации: '.$code,
 				'sign' => 'SMS Aero',
-				'channel' => 'INFO',
+				'channel' => ( !preg_match('/^(\+7|7|8).+/ui', $inputs['phone']) ? 'INTERNATIONAL' : 'INFO' ),
 			];
 			$link = $url.http_build_query($args, '', '&');
 			
@@ -73,8 +73,7 @@ class AuthController extends Controller
 				else
 				{
 					$token = Str::random(50);
-					Redis::set('user:'.$token, json_encode(['code' => $code, 'data' => $inputs]));
-					Redis::expire('user:'.$token, (60*60));
+					Redis::set('user:'.$token, json_encode(['code' => $code, 'data' => $inputs]), 'EX', 60*1000);
 					
 					$this->response = [
 						'token' => $token,
@@ -86,7 +85,7 @@ class AuthController extends Controller
 		return response()->json($this->response, $this->status);
 	}
 
-	public function verify(Request $request) {
+	public function registerConfirm(Request $request) {
 		$inputs = $request->all();
 		$validator = Validator::make($inputs, [
 			'code' => ['required', 'numeric'],
@@ -138,6 +137,7 @@ class AuthController extends Controller
 					
 					$this->starus = 200;
 					$this->response = [
+						'user' => $newUser,
 						'token' => $token,
 						'message'=> 'Регистрация прошла успешно'
 					];
@@ -163,7 +163,7 @@ class AuthController extends Controller
 				'messages' => $validator->errors()
 			];
 		}
-		else if (!$user = User::where('phone', $inputs['phone'])->first())
+		else if (!$user = User::where('phone', $inputs['phone'])->orWhere('phone', 'like', '%'.$inputs['phone'])->first())
 		{
 			$this->status = 400;
 			$this->response = [
@@ -173,14 +173,14 @@ class AuthController extends Controller
 		}
 		else
 		{
-			$code = rand(0000, 9999);
+			$code = rand(1000, 9999);
 			$token = Str::random(50);
 			
 			$args = [
 				'number' => $inputs['phone'],
 				'text' => 'Код для сброса пароля: '.$code,
 				'sign' => 'SMS Aero',
-				'channel' => 'INFO',
+				'channel' => ( !preg_match('/^(\+7|7|8).+/ui', $inputs['phone']) ? 'INTERNATIONAL' : 'INFO' ),
 			];
 			$link = $url.http_build_query($args, '', '&');
 			
@@ -212,8 +212,7 @@ class AuthController extends Controller
 				}
 				else
 				{
-					Redis::set('recovery:'.$token, json_encode(['code' => $code, 'phone' => $inputs['phone']]));
-					Redis::expire('recovery:'.$token, (60*20));
+					Redis::set('recovery:'.$token, json_encode(['code' => $code, 'phone' => $inputs['phone']]), 'EX', 60*1000);
 					
 					$this->response = [
 						'token' => $token,
@@ -269,7 +268,7 @@ class AuthController extends Controller
 					$pass = Str::random(8);
 					$phone = $data['phone'];
 					
-					$user = User::where('phone', $phone)->first();
+					$user = User::where('phone', $phone)->orWhere('phone', 'like', '%'.$phone)->first();
 					
 					if (empty($user))
 					{
@@ -321,7 +320,8 @@ class AuthController extends Controller
 			
 			$this->starus = 200;
 			$this->response = [
-				'token' => $user->token, 
+				'user' => $user,
+				'token' => $user->token,
 				'message'=> 'Авторизация прошла успешно'
 			];
 			
@@ -336,10 +336,20 @@ class AuthController extends Controller
 		}
 		return response()->json($this->response, $this->status); 
 	}
-
+	
+	public function test(Request $request)
+	{
+		$inputs = $request->all();
+		$validator = Validator::make($inputs, [
+			'phone' => ['phone:RU,UA,AZ,BY,MD'],
+		]);
+		
+		var_dump(( !preg_match('/^(\+7|7|8).+/ui', $inputs['phone']) ? 'INTERNATIONAL' : 'INFO' ));
+		return;
+	}
+	
 	public function getUser()
 	{
-		$user = Auth::user();
-		return response()->json(['data' => $user], 200); 
+		return response()->json(['data' => Auth::user()], 200); 
 	}
 }
