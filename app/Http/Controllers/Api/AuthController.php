@@ -28,7 +28,7 @@ class AuthController extends Controller
 		
 		if ($validator->fails())
 		{
-			$this->starus = 401;
+			$this->status = 401;
 			$this->response = [
 				'error' => true, 
 				'messages' => $validator->errors()
@@ -94,7 +94,7 @@ class AuthController extends Controller
 		
 		if ($validator->fails())
 		{
-			$this->starus = 401;
+			$this->status = 401;
 			$this->response = [
 				'error' => true, 
 				'messages' => $validator->errors()
@@ -157,7 +157,7 @@ class AuthController extends Controller
 		
 		if ($validator->fails())
 		{
-			$this->starus = 400;
+			$this->status = 400;
 			$this->response = [
 				'error' => true, 
 				'messages' => $validator->errors()
@@ -234,7 +234,7 @@ class AuthController extends Controller
 		
 		if ($validator->fails())
 		{
-			$this->starus = 401;
+			$this->status = 401;
 			$this->response = [
 				'error' => true, 
 				'messages' => $validator->errors()
@@ -306,7 +306,7 @@ class AuthController extends Controller
 
 		if ($validator->fails())
 		{
-			$this->starus = 400;
+			$this->status = 400;
 			$this->response = [
 				'error' => true, 
 				'messages' => $validator->errors()
@@ -318,7 +318,7 @@ class AuthController extends Controller
 			$user->token = $user->createToken('AppName')->accessToken;
 			$user->save();
 			
-			$this->starus = 200;
+			$this->status = 200;
 			$this->response = [
 				'user' => $user,
 				'token' => $user->token,
@@ -328,24 +328,13 @@ class AuthController extends Controller
 		}
 		else
 		{
-			$this->starus = 401;
+			$this->status = 401;
 			$this->response = [
 				'error' => true, 
 				'messages' => 'Номер или пароль неверный.'
 			];
 		}
 		return response()->json($this->response, $this->status); 
-	}
-	
-	public function test(Request $request)
-	{
-		$inputs = $request->all();
-		$validator = Validator::make($inputs, [
-			'phone' => ['phone:RU,UA,AZ,BY,MD'],
-		]);
-		
-		var_dump(( !preg_match('/^(\+7|7|8).+/ui', $inputs['phone']) ? 'INTERNATIONAL' : 'INFO' ));
-		return;
 	}
 	
 	public function getUser()

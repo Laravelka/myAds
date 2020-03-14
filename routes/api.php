@@ -13,7 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('test', 'Api\AuthController@test');
+// Route::post('test', 'Api\AuthController@test');
+// Route::post('test', 'Api\CardsController@add');
+Route::get('test', 'Api\OrdersController@test');
+
 Route::post('login', 'Api\AuthController@login');
 Route::post('recovery', 'Api\AuthController@recovery');
 Route::post('recovery/confirm', 'Api\AuthController@recoveryConfirm');
@@ -21,5 +24,24 @@ Route::post('register', 'Api\AuthController@register');
 Route::post('register/confirm', 'Api\AuthController@registerConfirm');
 
 Route::group(['middleware' => 'auth:api'], function() {
-	Route::get('user', 'Api\AuthController@getUser');
+	Route::prefix('users')->group(function() {
+		Route::get('auth', 'Api\AuthController@getUser');
+		Route::get('getAll', 'Api\UsersController@getAll');
+		Route::post('update', 'Api\UsersController@update');
+		Route::get('getById', 'Api\UsersController@getById');
+		Route::post('avatar', 'Api\UsersController@uploadAvatar');
+	});
+	
+	Route::prefix('markers')->group(function() {
+		Route::get('getAll', 'Api\MarkersController@getAll');
+		Route::get('getById', 'Api\MarkersController@getById');
+	});
+	
+	Route::prefix('orders')->group(function() {
+		Route::get('getAll', 'Api\OrdersController@getAll');
+		Route::post('create', 'Api\OrdersController@create');
+    Route::post('cancel', 'Api\OrdersController@cancel');
+		Route::get('getById', 'Api\OrdersController@getById');
+	});
 });
+Route::any('yandex/callback', 'Api\YandexCallbackController@webhook');

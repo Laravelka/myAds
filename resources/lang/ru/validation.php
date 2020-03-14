@@ -12,6 +12,12 @@ return [
     | другие, которые лучше подходят для вашего приложения.
     |
     */
+    'credit_card'	  => [
+		'card_cvc_invalid' => 'CVC код неверный',
+		'card_length_invalid' => 'Номер карты неверный',
+		'card_expiration_year_invalid' => 'Год неверный',
+		'card_expiration_month_invalid' => 'Месяц неверный',
+	],
     'phone'           => 'Поле :attribute содержит недопустимый номер.',
     'accepted'        => 'Вы должны принять :attribute.',
     'active_url'      => 'Поле :attribute содержит недействительный URL.',
