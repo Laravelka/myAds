@@ -160,6 +160,7 @@ class OrdersController extends Controller
 	{
 		$orders = DB::table('markers')
 						->where('ordered_markers.user_id', Auth::user()->id)
+						->where('ordered_markers.status', '<>', 'canceled')
 						->leftJoin('ordered_markers', 'markers.id', '=', 'ordered_markers.marker_id')
 						->select(
 							'markers.*',

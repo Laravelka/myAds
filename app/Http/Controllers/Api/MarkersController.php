@@ -29,6 +29,12 @@ class MarkersController extends Controller
 		}
 		else
 		{
+			$markers = array_map(function($item) {
+				$item->image = '/storage'.$item->image;
+				
+				return $item;
+			}, $markers->toArray());
+			
 			$status = 200;
 			$response = [
 				'markers' => $markers
@@ -56,6 +62,8 @@ class MarkersController extends Controller
 		}
 		else
 		{
+			$marker->image = '/storage'.$marker->image;
+			
 			$status = 200;
 			$response = [
 				'marker' => $marker

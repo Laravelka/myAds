@@ -57,9 +57,16 @@ class Handler extends ExceptionHandler
 
 	protected function unauthenticated($request, AuthenticationException $exception)
 	{
-		return response()->json([
-			'error' => true, 
-			'message' => 'Вы не авторизованы.'
-		], 401);
+		if ($request->ajax() || $request->wantsJson() || $request->expectsJson())
+		{
+			return response()->json([
+				'error' => true, 
+				'message' => 'Вы не авторизованы.'
+			], 401);
+		}
+		else
+		{
+			abort(401);
+		}
 	}
 }

@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'token', 'email', 'phone', 'password',
+        'role', 'name', 'image', 'token', 'email', 'phone', 'password',
     ];
 
     /**
@@ -41,5 +41,15 @@ class User extends Authenticatable
 	public function orderedMarker()
 	{
 		return $this->hasOne('App\OrderedMarker');
+	}
+	
+	public function isAdmin()
+	{
+		return $this->isRole('admin');
+	}
+	
+	protected function isRole($role)
+	{
+		return ($this->role == $role);
 	}
 }

@@ -61,7 +61,8 @@ class UsersController extends Controller
 		$user = Auth::user();
 		$inputs = $request->all();
 		$validator = Validator::make($inputs, [
-            'name' => ['required', 'string', 'max:120'],
+            'name' => ['string', 'max:120'],
+			'email' => ['unique:users', 'email'],
             'phone' => ['unique:users', 'phone:RU,UA,AZ,BY,MD'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -76,7 +77,9 @@ class UsersController extends Controller
 		}
 		else
 		{
-			$user->update($inputs);
+			$user->update(array_merge($inputs, [
+				'password' => bcrypt($inputs['password'])
+			]));
 			
 			$status = 200;
 			$response = [

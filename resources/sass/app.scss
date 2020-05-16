@@ -1,1 +1,38 @@
-//
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+.modal.modal-black .modal-content {
+    background: linear-gradient(180deg, #222a42 0, #1d253b);
+    color: hsla(0, 0%, 100%, .8)
+}
+
+.modal.modal-black .modal-content .modal-header .modal-title,
+.modal.modal-black .modal-content .modal-header .title {
+    color: hsla(0, 0%, 100%, .9)
+}
+.modal.modal-black .modal-header {
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.modal.modal-black .modal-footer {
+    border-top-color: rgba(0, 0, 0, 0);
+}
+.modal.modal-black .modal-content .modal-body p {
+    color: hsla(0, 0%, 100%, .8)
+}
+
+.modal.modal-black h1,
+.modal.modal-black h2,
+.modal.modal-black h3,
+.modal.modal-black h4,
+.modal.modal-black h5,
+.modal.modal-black h6,
+.modal.modal-black p {
+    color: #fff
+}

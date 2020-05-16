@@ -196,5 +196,6 @@ return [
         'time'                  => 'Время',
         'available'             => 'Доступно',
         'size'                  => 'Размер',
+		'phone_or_email'	    => 'телефон или e-mail',
     ],
 ];
